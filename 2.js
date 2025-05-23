@@ -8,34 +8,54 @@ The frame is built with * and has a border one line thick.
 The width of the frame automatically adapts to the longest name plus a margin of 1 space on each side.*/
 
 
+// MY CODE
 function createFrame(names) {
-    let longest = names.reduce((max, current) => (current.length > max ? current.length : max), names[0].length);
-    let stars = [];
-    let spacing = [];
-    for (let i = 0; i < longest; i++) {
-        stars.push("*")
-        spacing.push(" ");
-    }
-    let starsJoin = stars.join("")
-
-    let frame = names.map((name) =>{
-        let nameSplit = name.split("");
-        let result = spacing.map((item, index) =>{
-            item = nameSplit[index] || " ";
-            return item;
-        })
-        name = result;
-        return `* ${name.join("")} *`
-
+    const mapNames = names.map(item => {
+        return item.length
     })
-    /*frame.push(starsJoin)
-    frame.unshift(starsJoin)*/
-return`**${starsJoin}**
-${frame.join("\n")}
-**${starsJoin}**
-`
-  }
 
-  console.log(createFrame(["a", "bb", "ccc"]))
+    const maxNumber = Math.max(...mapNames)
+
+    const wrappers = [];
+
+    for (let i = 0; i < maxNumber; i++) {
+        wrappers.push("*")
+    }
+
+    const frame = names.map(item =>{
+        let spacingNumber = wrappers.length - item.length;
+        let spacingChar = []
+        for (let i = 0; i < spacingNumber; i++) {
+            spacingChar.push(" ")
+        }
+        item = `* ${item}${spacingChar.join("")} *`
+        return item
+    })
+
+    let result = `**${wrappers.join("")}**
+${frame.join("\n")}
+**${wrappers.join("")}**`
+
+    return result
+}
+
+console.log(createFrame(['midu', 'madeval', 'educalvolpz']))
+
+
+// AI REFACTOR CODE
+
+function createFrame(names) {
+    const maxLength = Math.max(...names.map(name => name.length));
+    const border = '*'.repeat(maxLength + 4);
+
+    const framedNames = names.map(name => {
+        const padding = ' '.repeat(maxLength - name.length);
+        return `* ${name}${padding} *`;
+    });
+
+    return [border, ...framedNames, border].join('\n');
+}
+
+
 
 
